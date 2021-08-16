@@ -11,8 +11,8 @@ void appSleep()
     preferences.begin("WiFi", false);
     preferences.putInt("mode", (int)WiFi.getMode());
     preferences.end();
-    M5m.setWakeupButton(BUTTON_B_PIN);
-    M5m.powerOFF();
+    //M5m.setWakeupButton(BUTTON_B_PIN);
+    //M5m.powerOFF();
 }
 
 void appAbout()
