@@ -1,5 +1,5 @@
 #pragma once
-#include "M5StackMod.h"
+#include "globals.h"
 
 #define CH1COLOR YELLOW
 #define CH2COLOR MAGENTA
@@ -41,7 +41,7 @@ private:
   int trig_mode = TRIG_AUTO;
   int trig_edge = TRIG_E_DN;
   int trig_ch = 0;
-  int menu = 19;
+  int osc_menu = 19;
   int rate = 3;
   unsigned int a, ad, oad, minval, maxval, trig_lv = 40;
   int16_t ch0_off = 0;

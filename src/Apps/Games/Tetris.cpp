@@ -3,7 +3,7 @@
 //========================================================================
 void TetrisClass::Run()
 {
-    M5m.Lcd.fillScreen(BLACK); // CLEAR SCREEN
+    M5.Lcd.fillScreen(BLACK); // CLEAR SCREEN
     //----------------------------// Make Blocks ----------------------------
     make_block(0, BLACK);  // Type No, Color
     make_block(1, 0x00F0); // DDDD     RED
@@ -14,31 +14,31 @@ void TetrisClass::Run()
     make_block(6, 0xF00F); // _DD,DD_  LIGHT GREEN
     make_block(7, 0xF8FC); // _D_,DDD  PINK
     //----------------------------------------------------------------------
-    M5m.Lcd.drawJpg((uint8_t *)tetris_img, (sizeof(tetris_img) / sizeof(tetris_img[0])));
-    M5m.Lcd.setFreeFont(FFS9B);
+    M5.Lcd.drawJpg((uint8_t *)tetris_img, (sizeof(tetris_img) / sizeof(tetris_img[0])));
+    M5.Lcd.setFreeFont(FFS9B);
     PutStartPos(); // Start Position
     for (int i = 0; i < 4; ++i)
     {
         screen[pos.X + block.square[rot][i].X][pos.Y + block.square[rot][i].Y] = block.color;
     }
     Draw(); // Draw block
-    M5m.Lcd.setTextColor(BLUE);
-    M5m.Lcd.drawCentreString("Score", 50, 150, 1);
-    M5m.Lcd.drawCentreString("Max Score", 50, 190, 1);
-    M5m.Lcd.drawCentreString(String(max_score), 50, 210, 1);
+    M5.Lcd.setTextColor(BLUE);
+    M5.Lcd.drawCentreString("Score", 50, 150, 1);
+    M5.Lcd.drawCentreString("Max Score", 50, 190, 1);
+    M5.Lcd.drawCentreString(String(max_score), 50, 210, 1);
 
     while (1)
     {
         if (gameover)
         {
-            M5m.update();
-            M5m.Lcd.setFreeFont(FSS24);
-            M5m.Lcd.setTextColor(RED);
-            M5m.Lcd.drawCentreString("GAME OVER", 160, 110, 1);
+            M5.update();
+            M5.Lcd.setFreeFont(FSS24);
+            M5.Lcd.setTextColor(RED);
+            M5.Lcd.drawCentreString("GAME OVER", 160, 110, 1);
 
-            while (!M5m.BtnB.wasPressed())
+            while (!M5.BtnB.wasPressed())
             {
-                M5m.update();
+                M5.update();
             }
             return;
         }
@@ -46,13 +46,13 @@ void TetrisClass::Run()
         int next_rot = rot;
         GetNextPosRot(&next_pos, &next_rot);
         ReviseScreen(next_pos, next_rot);
-        M5m.update();
+        M5.update();
         delay(game_speed); // SPEED ADJUST
     }
 }
 //========================================================================
 void TetrisClass::Draw()
-{ 
+{
     for (int i = 0; i < Width; ++i)
     {
         for (int j = 0; j < Height; ++j)
@@ -66,7 +66,7 @@ void TetrisClass::Draw()
             }
         }
     }
-    M5m.Lcd.drawBitmap(100, 0, 120, 240, (uint8_t *)backBuffer);
+    M5.Lcd.drawBitmap(100, 0, 120, 240, (uint8_t *)backBuffer);
 }
 //========================================================================
 void TetrisClass::PutStartPos()
@@ -75,19 +75,19 @@ void TetrisClass::PutStartPos()
     pos.Y = 1;
     block = blocks[random(7)];
     rot = random(block.numRotate);
-    M5m.Lcd.setTextColor(3608);
-    M5m.Lcd.drawCentreString(String(score), 50, 170, 1);
-    M5m.Lcd.setTextColor(RED);
+    M5.Lcd.setTextColor(3608);
+    M5.Lcd.drawCentreString(String(score), 50, 170, 1);
+    M5.Lcd.setTextColor(RED);
     score++;
-    M5m.Lcd.drawCentreString(String(score), 50, 170, 1);
+    M5.Lcd.drawCentreString(String(score), 50, 170, 1);
 
     if (score > max_score)
     {
-        M5m.Lcd.setTextColor(3608);
-        M5m.Lcd.drawCentreString(String(max_score), 50, 210, 1);
-        M5m.Lcd.setTextColor(RED);
+        M5.Lcd.setTextColor(3608);
+        M5.Lcd.drawCentreString(String(max_score), 50, 210, 1);
+        M5.Lcd.setTextColor(RED);
         max_score = score;
-        M5m.Lcd.drawCentreString(String(max_score), 50, 210, 1);
+        M5.Lcd.drawCentreString(String(max_score), 50, 210, 1);
     }
 }
 //========================================================================
@@ -127,19 +127,19 @@ void TetrisClass::ClearKeys()
 //========================================================================
 bool TetrisClass::KeyPadLoop()
 {
-    if (M5m.BtnA.wasPressed())
+    if (M5.BtnA.wasPressed())
     {
         ClearKeys();
         but_LEFT = true;
         return true;
     }
-    if (M5m.BtnC.wasPressed())
+    if (M5.BtnC.wasPressed())
     {
         ClearKeys();
         but_RIGHT = true;
         return true;
     }
-    if (M5m.BtnB.wasPressed())
+    if (M5.BtnB.wasPressed())
     {
         ClearKeys();
         but_A = true;
@@ -254,7 +254,7 @@ void TetrisClass::ReviseScreen(Point next_pos, int next_rot)
 }
 //========================================================================
 void TetrisClass::make_block(int n, uint16_t color)
-{ 
+{
     for (int i = 0; i < 12; i++)
         for (int j = 0; j < 12; j++)
         {
@@ -281,9 +281,9 @@ TetrisClass::~TetrisClass()
     preferences.end();
 
 
-    M5m.Lcd.fillScreen(0);
-    M5m.Lcd.setTextSize(1);
-	M5m.Lcd.setTextFont(1);
-    M5m.drawAppMenu(F("GAMES"), F("ESC"), F("SELECT"), F("LIST"));
-    M5m.showList();
+    M5.Lcd.fillScreen(0);
+    M5.Lcd.setTextSize(1);
+	M5.Lcd.setTextFont(1);
+    menu.drawAppMenu(F("GAMES"), F("ESC"), F("SELECT"), F("LIST"));
+    menu.showList();
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "M5StackMod.h"
+#include "globals.h"
 #include "Tools/Mp3Player.h"
 #include "Tools/VideoPlayer.h"
 

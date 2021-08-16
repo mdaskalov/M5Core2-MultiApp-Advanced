@@ -13,14 +13,14 @@ void FlappyBirdClass::game_loop()
     unsigned char GAMEH = TFTH - FLOORH;
     // draw the floor once, we will not overwrite on this area in-game
     // black line
-    M5m.Lcd.drawFastHLine(0, GAMEH, TFTW, BLACK);
+    M5.Lcd.drawFastHLine(0, GAMEH, TFTW, BLACK);
     // grass and stripe
-    M5m.Lcd.fillRect(0, GAMEH + 1, TFTW2, GRASSH, GRASSCOL);
-    M5m.Lcd.fillRect(TFTW2, GAMEH + 1, TFTW2, GRASSH, GRASSCOL2);
+    M5.Lcd.fillRect(0, GAMEH + 1, TFTW2, GRASSH, GRASSCOL);
+    M5.Lcd.fillRect(TFTW2, GAMEH + 1, TFTW2, GRASSH, GRASSCOL2);
     // black line
-    M5m.Lcd.drawFastHLine(0, GAMEH + GRASSH, TFTW, BLACK);
+    M5.Lcd.drawFastHLine(0, GAMEH + GRASSH, TFTW, BLACK);
     // mud
-    M5m.Lcd.fillRect(0, GAMEH + GRASSH + 1, TFTW, FLOORH - GRASSH, FLOORCOL);
+    M5.Lcd.fillRect(0, GAMEH + GRASSH + 1, TFTW, FLOORH - GRASSH, FLOORCOL);
     // grass x position (for stripe animation)
     long grassx = TFTW;
     // game loop time variables
@@ -40,7 +40,7 @@ void FlappyBirdClass::game_loop()
             // ===============
             // input
             // ===============
-            if (M5m.BtnB.wasPressed())
+            if (M5.BtnB.wasPressed())
             {
                 // if the bird is not too close to the top of the screen apply jump force
                 if (bird.y > BIRDH2 * 0.5)
@@ -53,7 +53,7 @@ void FlappyBirdClass::game_loop()
                     bird.vel_y = 0;
                 }
             }
-            M5m.update();
+            M5.update();
 
             // ===============
             // update
@@ -93,24 +93,24 @@ void FlappyBirdClass::game_loop()
         if (pipes.x >= 0 && pipes.x < TFTW)
         {
             // pipe color
-            M5m.Lcd.drawFastVLine(pipes.x + 3, 0, pipes.gap_y, PIPECOL);
-            M5m.Lcd.drawFastVLine(pipes.x + 3, pipes.gap_y + GAPHEIGHT + 1, GAMEH - (pipes.gap_y + GAPHEIGHT + 1), PIPECOL);
+            M5.Lcd.drawFastVLine(pipes.x + 3, 0, pipes.gap_y, PIPECOL);
+            M5.Lcd.drawFastVLine(pipes.x + 3, pipes.gap_y + GAPHEIGHT + 1, GAMEH - (pipes.gap_y + GAPHEIGHT + 1), PIPECOL);
             // highlight
-            M5m.Lcd.drawFastVLine(pipes.x, 0, pipes.gap_y, PIPEHIGHCOL);
-            M5m.Lcd.drawFastVLine(pipes.x, pipes.gap_y + GAPHEIGHT + 1, GAMEH - (pipes.gap_y + GAPHEIGHT + 1), PIPEHIGHCOL);
+            M5.Lcd.drawFastVLine(pipes.x, 0, pipes.gap_y, PIPEHIGHCOL);
+            M5.Lcd.drawFastVLine(pipes.x, pipes.gap_y + GAPHEIGHT + 1, GAMEH - (pipes.gap_y + GAPHEIGHT + 1), PIPEHIGHCOL);
             // bottom and top border of pipe
-            M5m.Lcd.drawPixel(pipes.x, pipes.gap_y, PIPESEAMCOL);
-            M5m.Lcd.drawPixel(pipes.x, pipes.gap_y + GAPHEIGHT, PIPESEAMCOL);
+            M5.Lcd.drawPixel(pipes.x, pipes.gap_y, PIPESEAMCOL);
+            M5.Lcd.drawPixel(pipes.x, pipes.gap_y + GAPHEIGHT, PIPESEAMCOL);
             // pipe seam
-            M5m.Lcd.drawPixel(pipes.x, pipes.gap_y - 6, PIPESEAMCOL);
-            M5m.Lcd.drawPixel(pipes.x, pipes.gap_y + GAPHEIGHT + 6, PIPESEAMCOL);
-            M5m.Lcd.drawPixel(pipes.x + 3, pipes.gap_y - 6, PIPESEAMCOL);
-            M5m.Lcd.drawPixel(pipes.x + 3, pipes.gap_y + GAPHEIGHT + 6, PIPESEAMCOL);
+            M5.Lcd.drawPixel(pipes.x, pipes.gap_y - 6, PIPESEAMCOL);
+            M5.Lcd.drawPixel(pipes.x, pipes.gap_y + GAPHEIGHT + 6, PIPESEAMCOL);
+            M5.Lcd.drawPixel(pipes.x + 3, pipes.gap_y - 6, PIPESEAMCOL);
+            M5.Lcd.drawPixel(pipes.x + 3, pipes.gap_y + GAPHEIGHT + 6, PIPESEAMCOL);
         }
         // erase behind pipe
         if (pipes.x <= TFTW)
         {
-            M5m.Lcd.drawFastVLine(pipes.x + PIPEW, 0, GAMEH, BCKGRDCOL);
+            M5.Lcd.drawFastVLine(pipes.x + PIPEW, 0, GAMEH, BCKGRDCOL);
         }
         // bird
         // ---------------
@@ -124,13 +124,13 @@ void FlappyBirdClass::game_loop()
             tmpy = BIRDH - 1;
             do
             {
-                M5m.Lcd.drawPixel(px, bird.old_y + tmpy, BCKGRDCOL);
+                M5.Lcd.drawPixel(px, bird.old_y + tmpy, BCKGRDCOL);
             } while (tmpy--);
             // draw bird sprite at new position
             tmpy = BIRDH - 1;
             do
             {
-                M5m.Lcd.drawPixel(px, bird.y + tmpy, birdcol[tmpx + (tmpy * BIRDW)]);
+                M5.Lcd.drawPixel(px, bird.y + tmpy, birdcol[tmpx + (tmpy * BIRDW)]);
             } while (tmpy--);
         } while (tmpx--);
         // save position to erase bird on next draw
@@ -142,8 +142,8 @@ void FlappyBirdClass::game_loop()
         {
             grassx = TFTW;
         }
-        M5m.Lcd.drawFastVLine(grassx % TFTW, GAMEH + 1, GRASSH - 1, GRASSCOL);
-        M5m.Lcd.drawFastVLine((grassx + 64) % TFTW, GAMEH + 1, GRASSH - 1, GRASSCOL2);
+        M5.Lcd.drawFastVLine(grassx % TFTW, GAMEH + 1, GRASSH - 1, GRASSCOL);
+        M5.Lcd.drawFastVLine((grassx + 64) % TFTW, GAMEH + 1, GRASSH - 1, GRASSCOL2);
 
         // ===============
         // collision
@@ -171,16 +171,16 @@ void FlappyBirdClass::game_loop()
         {
             passed_pipe = false;
             // erase flappy_bird_score with background color
-            M5m.Lcd.setTextColor(BCKGRDCOL);
-            M5m.Lcd.drawNumber(flappy_bird_score, TFTW2, 4);
+            M5.Lcd.setTextColor(BCKGRDCOL);
+            M5.Lcd.drawNumber(flappy_bird_score, TFTW2, 4);
             // set text color back to white for new flappy_bird_score
-            M5m.Lcd.setTextColor(WHITE);
+            M5.Lcd.setTextColor(WHITE);
             // increase flappy_bird_score since we successfully passed a pipe
             flappy_bird_score++;
         }
         // update flappy_bird_score
         // ---------------
-        M5m.Lcd.drawNumber(flappy_bird_score, TFTW2, 4);
+        M5.Lcd.drawNumber(flappy_bird_score, TFTW2, 4);
     }
     // add a small delay to show how the player lost
     vTaskDelay(1200 / portTICK_PERIOD_MS);
@@ -189,7 +189,7 @@ void FlappyBirdClass::game_loop()
 void FlappyBirdClass::game_init()
 {
     // clear screen
-    M5m.Lcd.fillScreen(BCKGRDCOL);
+    M5.Lcd.fillScreen(BCKGRDCOL);
     // reset flappy_bird_score
     flappy_bird_score = 0;
     // init bird
@@ -209,26 +209,26 @@ void FlappyBirdClass::game_init()
 // ---------------
 void FlappyBirdClass::game_start()
 {
-    M5m.Lcd.fillScreen(BLACK);
-    M5m.Lcd.fillRect(10, TFTH2 - 20, TFTW - 20, 1, WHITE);
-    M5m.Lcd.fillRect(10, TFTH2 + 32, TFTW - 20, 1, WHITE);
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.setTextSize(3);
+    M5.Lcd.fillScreen(BLACK);
+    M5.Lcd.fillRect(10, TFTH2 - 20, TFTW - 20, 1, WHITE);
+    M5.Lcd.fillRect(10, TFTH2 + 32, TFTW - 20, 1, WHITE);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.setTextSize(3);
     // half width - num char * char width in pixels
-    M5m.Lcd.drawString("FLAPPY", TFTW2 - (6 * 9), TFTH2 - 16);
-    M5m.Lcd.setTextSize(3);
-    M5m.Lcd.drawString("-BIRD-", TFTW2 - (6 * 9), TFTH2 + 8);
-    M5m.Lcd.setTextSize(2);
-    M5m.Lcd.drawString("M5Stack", 10, TFTH2 - 36);
-    M5m.Lcd.drawString("Mod by Calin", TFTW2 - (17 * 9), TFTH2 + 36);
+    M5.Lcd.drawString("FLAPPY", TFTW2 - (6 * 9), TFTH2 - 16);
+    M5.Lcd.setTextSize(3);
+    M5.Lcd.drawString("-BIRD-", TFTW2 - (6 * 9), TFTH2 + 8);
+    M5.Lcd.setTextSize(2);
+    M5.Lcd.drawString("M5Stack", 10, TFTH2 - 36);
+    M5.Lcd.drawString("Mod by Calin", TFTW2 - (17 * 9), TFTH2 + 36);
     while (1)
     {
         // wait for push button
-        if (M5m.BtnB.wasPressed())
+        if (M5.BtnB.wasPressed())
         {
             break;
         }
-        M5m.update();
+        M5.update();
     }
     // init game settings
     game_init();
@@ -246,7 +246,7 @@ void FlappyBirdClass::resetMaxflappy_bird_score()
 // ---------------
 void FlappyBirdClass::game_over()
 {
-    M5m.Lcd.fillScreen(BLACK);
+    M5.Lcd.fillScreen(BLACK);
     preferences.begin("Fpsc", false);
     maxflappy_bird_score = preferences.getInt("sc", 0);
 
@@ -254,39 +254,39 @@ void FlappyBirdClass::game_over()
     {
         preferences.putInt("sc", flappy_bird_score);
         maxflappy_bird_score = flappy_bird_score;
-        M5m.Lcd.setTextColor(RED);
-        M5m.Lcd.setTextSize(2);
-        //M5m.Lcd.setCursor(TFTW2 - (13 * 6), TFTH2 - 26);
-        M5m.Lcd.drawString("NEW HIGHSCORE", TFTW2 - (13 * 6), TFTH2 - 26);
+        M5.Lcd.setTextColor(RED);
+        M5.Lcd.setTextSize(2);
+        //M5.Lcd.setCursor(TFTW2 - (13 * 6), TFTH2 - 26);
+        M5.Lcd.drawString("NEW HIGHSCORE", TFTW2 - (13 * 6), TFTH2 - 26);
     }
     preferences.end();
 
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.setTextSize(3);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.setTextSize(3);
     // half width - num char * char width in pixels
-    M5m.Lcd.drawString("GAME OVER", TFTW2 - (9 * 9), TFTH2 - 6);
-    M5m.Lcd.setTextSize(2);
-    M5m.Lcd.drawString("Score: " + String(flappy_bird_score), 10, 10);
-    M5m.Lcd.drawString("press button", TFTW2 - (12 * 6), TFTH2 + 18);
-    M5m.Lcd.drawString("Max Score:" + String(maxflappy_bird_score), 10, 28);
-    M5m.Lcd.drawString("ScoreR", 30, 221);
-    M5m.Lcd.drawString("Start", 132, 221);
-    M5m.Lcd.drawString("Exit", 232, 221);
+    M5.Lcd.drawString("GAME OVER", TFTW2 - (9 * 9), TFTH2 - 6);
+    M5.Lcd.setTextSize(2);
+    M5.Lcd.drawString("Score: " + String(flappy_bird_score), 10, 10);
+    M5.Lcd.drawString("press button", TFTW2 - (12 * 6), TFTH2 + 18);
+    M5.Lcd.drawString("Max Score:" + String(maxflappy_bird_score), 10, 28);
+    M5.Lcd.drawString("ScoreR", 30, 221);
+    M5.Lcd.drawString("Start", 132, 221);
+    M5.Lcd.drawString("Exit", 232, 221);
     while (1)
     {
-        if (M5m.BtnA.wasPressed())
+        if (M5.BtnA.wasPressed())
         {
             resetMaxflappy_bird_score();
         }
-        if (M5m.BtnB.wasPressed())
+        if (M5.BtnB.wasPressed())
         {
             Run();
         }
-        if (M5m.BtnC.wasPressed())
+        if (M5.BtnC.wasPressed())
         {
             return;
         }
-        M5m.update();
+        M5.update();
     }
 }
 
@@ -304,9 +304,9 @@ FlappyBirdClass::FlappyBirdClass()
 
 FlappyBirdClass::~FlappyBirdClass()
 {
-    M5m.Lcd.fillScreen(0);
-    M5m.Lcd.setTextSize(1);
-	M5m.Lcd.setTextFont(1);
-    M5m.drawAppMenu(F("GAMES"), F("ESC"), F("SELECT"), F("LIST"));
-    M5m.showList();
+    M5.Lcd.fillScreen(0);
+    M5.Lcd.setTextSize(1);
+	M5.Lcd.setTextFont(1);
+    menu.drawAppMenu(F("GAMES"), F("ESC"), F("SELECT"), F("LIST"));
+    menu.showList();
 }

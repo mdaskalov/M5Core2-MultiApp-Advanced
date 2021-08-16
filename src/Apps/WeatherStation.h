@@ -1,5 +1,5 @@
 //#pragma once
-#include "M5StackMod.h"
+#include "globals.h"
 #include "WeatherIcons.h"
 #include "JsonListener.h"
 #include "WundergroundConditions.h"

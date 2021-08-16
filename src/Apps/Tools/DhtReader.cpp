@@ -2,16 +2,16 @@
 
 void DhtReaderClass::DrawWidgets()
 {
-    M5m.Lcd.drawCentreString("Temperature", 60, 80, 2);
-    M5m.Lcd.drawCentreString(String(temperature, 2), 60, 100, 4);
-    M5m.Lcd.drawCentreString("'C", 60, 125, 2);
-    M5m.Lcd.drawCentreString("Humidity", 260, 80, 2);
-    M5m.Lcd.drawCentreString(String(humidity, 2), 260, 100, 4);
-    M5m.Lcd.drawCentreString("%RH", 260, 125, 2);
-    M5m.Lcd.VprogressBar(120, 50, 20, 100, RED, (int)temperature + 20, true);
-    M5m.Lcd.fillCircle(129, 160, 20, RED);
-    M5m.Lcd.VprogressBar(180, 50, 20, 100, BLUE, (int)humidity - 20, true);
-    M5m.Lcd.fillCircle(189, 160, 20, BLUE);
+    M5.Lcd.drawCentreString("Temperature", 60, 80, 2);
+    M5.Lcd.drawCentreString(String(temperature, 2), 60, 100, 4);
+    M5.Lcd.drawCentreString("'C", 60, 125, 2);
+    M5.Lcd.drawCentreString("Humidity", 260, 80, 2);
+    M5.Lcd.drawCentreString(String(humidity, 2), 260, 100, 4);
+    M5.Lcd.drawCentreString("%RH", 260, 125, 2);
+    menu.VprogressBar(120, 50, 20, 100, RED, (int)temperature + 20, true);
+    M5.Lcd.fillCircle(129, 160, 20, RED);
+    menu.VprogressBar(180, 50, 20, 100, BLUE, (int)humidity - 20, true);
+    M5.Lcd.fillCircle(189, 160, 20, BLUE);
 }
 
 void DhtReaderClass::getDHTData()
@@ -102,11 +102,11 @@ void DhtReaderClass::getSHTData(uint8_t _address)
 
 void DhtReaderClass::Run()
 {
-    M5m.update();
-    M5m.Lcd.fillScreen(BLACK);
-    M5m.drawAppMenu(F("SHT Sensor"), F("ESC"), F("SHT"), F(""));
+    M5.update();
+    M5.Lcd.fillScreen(BLACK);
+    menu.drawAppMenu(F("SHT Sensor"), F("ESC"), F("SHT"), F(""));
 
-    while (!M5m.BtnA.wasPressed())
+    while (!M5.BtnA.wasPressed())
     {
         unsigned long start = millis();
         if (start - past >= 3000)
@@ -116,7 +116,7 @@ void DhtReaderClass::Run()
                 getSHTData(_address);
                 if (sw)
                 {
-                    M5m.drawAppMenu(F("SHT Sensor"), F("ESC"), F("DHT"), F(""));
+                    menu.drawAppMenu(F("SHT Sensor"), F("ESC"), F("DHT"), F(""));
                     sw = false;
                 }
             }
@@ -126,7 +126,7 @@ void DhtReaderClass::Run()
                 getDHTData();
                 if (sw)
                 {
-                    M5m.drawAppMenu(F("DHT Sensor"), F("ESC"), F("SHT"), F(""));
+                    menu.drawAppMenu(F("DHT Sensor"), F("ESC"), F("SHT"), F(""));
                     sw = false;
                 }
             }
@@ -140,13 +140,13 @@ void DhtReaderClass::Run()
             past = start;
         }
 
-        if (M5m.BtnB.wasPressed())
+        if (M5.BtnB.wasPressed())
         {
             SHT = !SHT;
             sw = true;
         }
 
-        M5m.update();
+        M5.update();
     }
 }
 
@@ -156,7 +156,7 @@ DhtReaderClass::DhtReaderClass()
 
 DhtReaderClass::~DhtReaderClass()
 {
-    M5m.Lcd.fillScreen(0);
-    M5m.drawAppMenu(F("TOOLS"), F("ESC"), F("SELECT"), F("LIST"));
-    M5m.showList();
+    M5.Lcd.fillScreen(0);
+    menu.drawAppMenu(F("TOOLS"), F("ESC"), F("SELECT"), F("LIST"));
+    menu.showList();
 }

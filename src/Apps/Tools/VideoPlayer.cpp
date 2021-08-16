@@ -2,14 +2,14 @@
 
 void VideoPlayerClass::Play(const char *fileName)
 {
-    M5m.update();
-    M5m.Lcd.fillScreen(BLACK);
+    M5.update();
+    M5.Lcd.fillScreen(BLACK);
     file = My_SD.open(fileName);
-    M5m.Lcd.setSwapBytes(true);
-    while(!M5m.BtnB.wasPressed() && file.read(videoBuffer, 93960))
+    M5.Lcd.setSwapBytes(true);
+    while(!M5.BtnB.wasPressed() && file.read(videoBuffer, 93960))
     {
-        M5m.Lcd.pushImage(15,36,290,162,(uint16_t*)videoBuffer);
-        M5m.update();
+        M5.Lcd.pushImage(15,36,290,162,(uint16_t*)videoBuffer);
+        M5.update();
     }
     file.close();
     return;
@@ -23,6 +23,6 @@ VideoPlayerClass::VideoPlayerClass()
 VideoPlayerClass::~VideoPlayerClass()
 {
     heap_caps_free(videoBuffer);
-    M5m.drawAppMenu(F("SD BROWSER"), F("EXIT"), F("OPEN"), F(">"));
-    M5m.showList();
+    menu.drawAppMenu(F("SD BROWSER"), F("EXIT"), F("OPEN"), F(">"));
+    menu.showList();
 }

@@ -41,10 +41,10 @@ void WeatherStationClass::updateData(bool msg = false)
 
     if (msg)
     {
-        M5m.Lcd.fillScreen(BLACK);
-        M5m.Lcd.setTextColor(WHITE);
-        M5m.Lcd.setFreeFont(FSS12);
-        M5m.Lcd.drawCentreString("Reading Weather Info...", 160, 120, 1);
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.setTextColor(WHITE);
+        M5.Lcd.setFreeFont(FSS12);
+        M5.Lcd.drawCentreString("Reading Weather Info...", 160, 120, 1);
     }
 
     configTime(Utc_Offset * 3600, 0, NTP_SERVERS);
@@ -70,21 +70,21 @@ simpleDSTadjust dstAdjusted(StartRule, EndRule);
 
 void WeatherStationClass::drawTime()
 {
-    M5m.Lcd.setTextColor(BLACK);
-    M5m.Lcd.setFreeFont(FSS18);
-    M5m.Lcd.drawRightString(time_str, 315, 5, 1);
+    M5.Lcd.setTextColor(BLACK);
+    M5.Lcd.setFreeFont(FSS18);
+    M5.Lcd.drawRightString(time_str, 315, 5, 1);
     now = dstAdjusted.time(&dstAbbrev);
     timeinfo = localtime(&now);
     date = ctime(&now);
     date = date.substring(0, 11) + String(1900 + timeinfo->tm_year);
     if (!dateDrawn || (timeinfo->tm_min == 0 && timeinfo->tm_sec == 1))
     {
-        M5m.Lcd.setTextColor(BLACK);
-        M5m.Lcd.setFreeFont(FSS9);
-        M5m.Lcd.drawString(oldDate, 5, 18, 1);
-        M5m.Lcd.setTextColor(WHITE);
-        M5m.Lcd.setFreeFont(FSS9);
-        M5m.Lcd.drawString(date, 5, 18, 1);
+        M5.Lcd.setTextColor(BLACK);
+        M5.Lcd.setFreeFont(FSS9);
+        M5.Lcd.drawString(oldDate, 5, 18, 1);
+        M5.Lcd.setTextColor(WHITE);
+        M5.Lcd.setFreeFont(FSS9);
+        M5.Lcd.drawString(date, 5, 18, 1);
         oldDate = date;
         dateDrawn = true;
     }
@@ -96,65 +96,65 @@ void WeatherStationClass::drawTime()
     }
 
     sprintf(time_str, "%02d:%02d:%02d\n", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.setFreeFont(FSS18);
-    M5m.Lcd.drawRightString(time_str, 315, 5, 1);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.setFreeFont(FSS18);
+    M5.Lcd.drawRightString(time_str, 315, 5, 1);
 }
 
 void WeatherStationClass::drawCurrentWeather()
 {
-    M5m.Lcd.drawFastHLine(0, 40, 320, WHITE);
-    M5m.Lcd.drawJpg((uint8_t *)getMeteoconIconFromProgmem(conditions.weatherIcon),
+    M5.Lcd.drawFastHLine(0, 40, 320, WHITE);
+    M5.Lcd.drawJpg((uint8_t *)getMeteoconIconFromProgmem(conditions.weatherIcon),
                     sizeof(getMeteoconIconFromProgmem(conditions.weatherIcon)) / getMeteoconIconFromProgmem(conditions.weatherIcon)[0], 100, 45);
-    M5m.Lcd.setTextColor(BLUE);
-    M5m.Lcd.setFreeFont(FSS12);
-    M5m.Lcd.drawRightString(WUNDERGROUND_CITY, 315, 50, 1);
-    M5m.Lcd.setTextColor(WHITE);
+    M5.Lcd.setTextColor(BLUE);
+    M5.Lcd.setFreeFont(FSS12);
+    M5.Lcd.drawRightString(WUNDERGROUND_CITY, 315, 50, 1);
+    M5.Lcd.setTextColor(WHITE);
 
     String temp = conditions.currentTemp + degreeSign;
-    M5m.Lcd.setFreeFont(FSS24);
-    M5m.Lcd.drawRightString(temp, 315, 75, 1);
-    M5m.Lcd.setTextColor(ORANGE);
-    M5m.Lcd.setFreeFont(FSS9);
-    M5m.Lcd.drawRightString(conditions.weatherText, 315, 117, 1);
-    M5m.Lcd.drawFastHLine(0, 140, 320, WHITE);
-    M5m.Lcd.setTextColor(CYAN);
-    M5m.Lcd.drawCentreString("Hum: " + conditions.humidity, 40, 50, 1);
-    M5m.Lcd.drawCentreString("Precip: " + forecasts[0].PoP + "%", 40, 117, 1);
-    M5m.Lcd.setTextColor(YELLOW);
-    M5m.Lcd.drawCentreString("Wind: " + conditions.windDir, 40, 75, 1);
-    M5m.Lcd.drawCentreString(conditions.windSpeed, 40, 95, 1);
+    M5.Lcd.setFreeFont(FSS24);
+    M5.Lcd.drawRightString(temp, 315, 75, 1);
+    M5.Lcd.setTextColor(ORANGE);
+    M5.Lcd.setFreeFont(FSS9);
+    M5.Lcd.drawRightString(conditions.weatherText, 315, 117, 1);
+    M5.Lcd.drawFastHLine(0, 140, 320, WHITE);
+    M5.Lcd.setTextColor(CYAN);
+    M5.Lcd.drawCentreString("Hum: " + conditions.humidity, 40, 50, 1);
+    M5.Lcd.drawCentreString("Precip: " + forecasts[0].PoP + "%", 40, 117, 1);
+    M5.Lcd.setTextColor(YELLOW);
+    M5.Lcd.drawCentreString("Wind: " + conditions.windDir, 40, 75, 1);
+    M5.Lcd.drawCentreString(conditions.windSpeed, 40, 95, 1);
 }
 
 void WeatherStationClass::drawForecastDetail(uint16_t x, uint16_t y, uint8_t dayIndex)
 {
     day = forecasts[dayIndex].forecastTitle.substring(0, 3);
     day.toUpperCase();
-    M5m.Lcd.setTextColor(YELLOW);
-    M5m.Lcd.setFreeFont(FSS9);
-    M5m.Lcd.drawCentreString(day, x + 25, y - 15, 2);
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.drawCentreString(forecasts[dayIndex].forecastLowTemp + "|" + forecasts[dayIndex].forecastHighTemp, x + 25, y, 2);
-    M5m.Lcd.drawJpg((uint8_t *)getMiniMeteoconIconFromProgmem(forecasts[dayIndex].forecastIcon),
+    M5.Lcd.setTextColor(YELLOW);
+    M5.Lcd.setFreeFont(FSS9);
+    M5.Lcd.drawCentreString(day, x + 25, y - 15, 2);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.drawCentreString(forecasts[dayIndex].forecastLowTemp + "|" + forecasts[dayIndex].forecastHighTemp, x + 25, y, 2);
+    M5.Lcd.drawJpg((uint8_t *)getMiniMeteoconIconFromProgmem(forecasts[dayIndex].forecastIcon),
                     sizeof(getMiniMeteoconIconFromProgmem(forecasts[dayIndex].forecastIcon)) / getMiniMeteoconIconFromProgmem(forecasts[dayIndex].forecastIcon)[0], x, y + 15);
-    M5m.Lcd.setTextColor(BLUE);
-    M5m.Lcd.setFreeFont(FSS9);
-    M5m.Lcd.drawCentreString(forecasts[dayIndex].PoP + "%", x + 25, y + 60, 2);
+    M5.Lcd.setTextColor(BLUE);
+    M5.Lcd.setFreeFont(FSS9);
+    M5.Lcd.drawCentreString(forecasts[dayIndex].PoP + "%", x + 25, y + 60, 2);
 }
 
 void WeatherStationClass::drawCurrentWeatherDetail()
 {
-    M5m.Lcd.drawFastHLine(0, 20, 320, WHITE);
-    M5m.Lcd.drawFastVLine(100, 20, 210, WHITE);
-    M5m.Lcd.drawFastHLine(0, 230, 320, WHITE);
-    M5m.Lcd.drawJpg((uint8_t *)getMeteoconIconFromProgmem(conditions.weatherIcon),
+    M5.Lcd.drawFastHLine(0, 20, 320, WHITE);
+    M5.Lcd.drawFastVLine(100, 20, 210, WHITE);
+    M5.Lcd.drawFastHLine(0, 230, 320, WHITE);
+    M5.Lcd.drawJpg((uint8_t *)getMeteoconIconFromProgmem(conditions.weatherIcon),
                     sizeof(getMeteoconIconFromProgmem(conditions.weatherIcon)) / getMeteoconIconFromProgmem(conditions.weatherIcon)[0], 0, 25);
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.setFreeFont(FSS9);
-    M5m.Lcd.drawCentreString("Current Conditions", 160, 2, 1);
-    M5m.Lcd.setTextColor(CYAN);
-    M5m.Lcd.setFreeFont(FSS12);
-    M5m.Lcd.drawCentreString(conditions.weatherText, 220, 25, 1);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.setFreeFont(FSS9);
+    M5.Lcd.drawCentreString("Current Conditions", 160, 2, 1);
+    M5.Lcd.setTextColor(CYAN);
+    M5.Lcd.setFreeFont(FSS12);
+    M5.Lcd.drawCentreString(conditions.weatherText, 220, 25, 1);
     drawLabelValue(0, "Temperature:", conditions.currentTemp + degreeSign);
     drawLabelValue(1, "Humidity:", conditions.humidity);
     drawLabelValue(2, "Feels Like:", conditions.feelslike + degreeSign);
@@ -165,30 +165,30 @@ void WeatherStationClass::drawCurrentWeatherDetail()
     drawLabelValue(7, "Precipitation:", conditions.precipitationToday);
     drawLabelValue(8, "UV Index:", conditions.UV);
 
-    M5m.Lcd.setTextColor(YELLOW);
-    M5m.Lcd.drawCentreString("SunRise:", 45, 130, 1);
-    M5m.Lcd.drawCentreString("SunSet:", 45, 170, 1);
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.drawCentreString(astronomy.sunriseTime, 45, 150, 1);
-    M5m.Lcd.drawCentreString(astronomy.sunsetTime, 45, 190, 1);
+    M5.Lcd.setTextColor(YELLOW);
+    M5.Lcd.drawCentreString("SunRise:", 45, 130, 1);
+    M5.Lcd.drawCentreString("SunSet:", 45, 170, 1);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.drawCentreString(astronomy.sunriseTime, 45, 150, 1);
+    M5.Lcd.drawCentreString(astronomy.sunsetTime, 45, 190, 1);
 }
 
 void WeatherStationClass::drawLabelValue(uint8_t line, String label, String value)
 {
-    M5m.Lcd.setFreeFont(FSS9);
-    M5m.Lcd.setTextColor(ORANGE);
-    M5m.Lcd.drawString(label, labelX, 52 + line * 20, 1);
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.drawString(value, valueX, 52 + line * 20, 1);
+    M5.Lcd.setFreeFont(FSS9);
+    M5.Lcd.setTextColor(ORANGE);
+    M5.Lcd.drawString(label, labelX, 52 + line * 20, 1);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.drawString(value, valueX, 52 + line * 20, 1);
 }
 
 void WeatherStationClass::drawForecastTable(uint8_t start)
 {
-    M5m.Lcd.drawFastHLine(0, 20, 320, WHITE);
-    M5m.Lcd.drawFastVLine(60, 20, 210, WHITE);
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.setFreeFont(FSS9);
-    M5m.Lcd.drawCentreString("Forecasts", 160, 2, 1);
+    M5.Lcd.drawFastHLine(0, 20, 320, WHITE);
+    M5.Lcd.drawFastVLine(60, 20, 210, WHITE);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.setFreeFont(FSS9);
+    M5.Lcd.drawCentreString("Forecasts", 160, 2, 1);
     fy = 0;
     for (uint8_t i = start; i < start + 4; i++)
     {
@@ -197,14 +197,14 @@ void WeatherStationClass::drawForecastTable(uint8_t start)
         {
             break;
         }
-        M5m.Lcd.drawJpg((uint8_t *)getMiniMeteoconIconFromProgmem(forecasts[i].forecastIcon),
+        M5.Lcd.drawJpg((uint8_t *)getMiniMeteoconIconFromProgmem(forecasts[i].forecastIcon),
                         sizeof(getMiniMeteoconIconFromProgmem(forecasts[i].forecastIcon)) / getMiniMeteoconIconFromProgmem(forecasts[i].forecastIcon)[0], 0, fy - 10);
-        M5m.Lcd.setTextColor(ORANGE);
-        M5m.Lcd.setFreeFont(FSS9);
-        M5m.Lcd.drawString(forecasts[i].forecastTitle, 70, (fy - 4), 1);
-        M5m.Lcd.setTextColor(WHITE);
-        M5m.Lcd.drawString(getShortText(forecasts[i].forecastIcon), 70, fy + 18, 1);
-        M5m.Lcd.setTextColor(WHITE);
+        M5.Lcd.setTextColor(ORANGE);
+        M5.Lcd.setFreeFont(FSS9);
+        M5.Lcd.drawString(forecasts[i].forecastTitle, 70, (fy - 4), 1);
+        M5.Lcd.setTextColor(WHITE);
+        M5.Lcd.drawString(getShortText(forecasts[i].forecastIcon), 70, fy + 18, 1);
+        M5.Lcd.setTextColor(WHITE);
         if (i % 2 == 0)
         {
             temp = forecasts[i].forecastHighTemp;
@@ -213,11 +213,11 @@ void WeatherStationClass::drawForecastTable(uint8_t start)
         {
             temp = forecasts[i - 1].forecastLowTemp;
         }
-        M5m.Lcd.setFreeFont(FSS9);
-        M5m.Lcd.drawRightString("Temp: " + temp + degreeSign, 315, (fy - 4), 1);
-        M5m.Lcd.setTextColor(BLUE);
-        M5m.Lcd.drawRightString("Precip: " + forecasts[i].PoP + "%", 315, fy + 18, 1);
-        M5m.Lcd.drawFastHLine(0, fy + 40, 320, WHITE);
+        M5.Lcd.setFreeFont(FSS9);
+        M5.Lcd.drawRightString("Temp: " + temp + degreeSign, 315, (fy - 4), 1);
+        M5.Lcd.setTextColor(BLUE);
+        M5.Lcd.drawRightString("Precip: " + forecasts[i].PoP + "%", 315, fy + 18, 1);
+        M5.Lcd.drawFastHLine(0, fy + 40, 320, WHITE);
     }
 }
 
@@ -356,7 +356,7 @@ const String WeatherStationClass::getShortText(String iconText)
 
 void WeatherStationClass::Run()
 {
-    M5m.update();
+    M5.update();
     if (WiFi.isConnected())
     {
         if (GetParams(My_SD, "/WeatherParams.txt"))
@@ -364,15 +364,15 @@ void WeatherStationClass::Run()
             updateData(true);
             lastDownloadUpdate = 0;
 
-            while (!M5m.BtnB.wasPressed())
+            while (!M5.BtnB.wasPressed())
             {
-                M5m.update();
-                if (M5m.BtnA.wasPressed())
+                M5.update();
+                if (M5.BtnA.wasPressed())
                 {
                     (screen > 0) ? screen-- : screen = 2;
                     drawn = false;
                 }
-                if (M5m.BtnC.wasPressed())
+                if (M5.BtnC.wasPressed())
                 {
                     (screen < 2) ? screen++ : screen = 0;
                     drawn = false;
@@ -389,7 +389,7 @@ void WeatherStationClass::Run()
                     switch (screen)
                     {
                     case 0:
-                        M5m.Lcd.fillScreen(BLACK);
+                        M5.Lcd.fillScreen(BLACK);
                         dateDrawn = false;
                         drawCurrentWeather();
                         drawForecastDetail(8, 160, 2);
@@ -399,11 +399,11 @@ void WeatherStationClass::Run()
                         drawForecastDetail(260, 160, 10);
                         break;
                     case 1:
-                        M5m.Lcd.fillScreen(BLACK);
+                        M5.Lcd.fillScreen(BLACK);
                         drawCurrentWeatherDetail();
                         break;
                     case 2:
-                        M5m.Lcd.fillScreen(BLACK);
+                        M5.Lcd.fillScreen(BLACK);
                         drawForecastTable(1);
                         break;
                     default:
@@ -416,20 +416,20 @@ void WeatherStationClass::Run()
 
         else
         {
-            M5m.Lcd.fillScreen(BLACK);
-            M5m.Lcd.setTextColor(WHITE);
-            M5m.Lcd.setFreeFont(FSS9);
-            M5m.Lcd.drawCentreString("WeatherParams.txt not found on SD!", 160, 60, 1);
+            M5.Lcd.fillScreen(BLACK);
+            M5.Lcd.setTextColor(WHITE);
+            M5.Lcd.setFreeFont(FSS9);
+            M5.Lcd.drawCentreString("WeatherParams.txt not found on SD!", 160, 60, 1);
             delay(3000);
             return;
         }
     }
     else
     {
-        M5m.Lcd.fillScreen(BLACK);
-        M5m.Lcd.setTextColor(WHITE);
-        M5m.Lcd.setFreeFont(FSS12);
-        M5m.Lcd.drawCentreString("Wifi Not Connected!", 160, 60, 1);
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.setTextColor(WHITE);
+        M5.Lcd.setFreeFont(FSS12);
+        M5.Lcd.drawCentreString("Wifi Not Connected!", 160, 60, 1);
         delay(3000);
     }
 }
@@ -440,8 +440,8 @@ WeatherStationClass::WeatherStationClass()
 
 WeatherStationClass::~WeatherStationClass()
 {
-    M5m.Lcd.fillScreen(0);
-    M5m.Lcd.setTextSize(1);
-	M5m.Lcd.setTextFont(1);
-    M5m.show();
+    M5.Lcd.fillScreen(0);
+    M5.Lcd.setTextSize(1);
+	M5.Lcd.setTextFont(1);
+    menu.show();
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "M5StackMod.h"
+#include "globals.h"
 
 class FoxGraphClass
 {
@@ -10,6 +10,6 @@ class FoxGraphClass
 
   private:
     void ShowGraph();
-    bool GetURLs(fs::FS &fs, const char *path);    
+    bool GetURLs(fs::FS &fs, const char *path);
 
 };

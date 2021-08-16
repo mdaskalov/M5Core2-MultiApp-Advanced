@@ -1,5 +1,4 @@
 #pragma once
-#include "M5StackMod.h"
-
+#include "globals.h"
 
 void Wps_run(bool mode);

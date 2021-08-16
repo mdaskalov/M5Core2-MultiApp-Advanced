@@ -1,6 +1,5 @@
 #pragma once
-#include "M5StackMod.h"
-
+#include "globals.h"
 #define PAGEMAX 1
 
 class SysinfoClass

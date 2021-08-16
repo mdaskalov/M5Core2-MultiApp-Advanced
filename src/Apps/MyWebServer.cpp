@@ -266,7 +266,7 @@ void printDirectory()
             output += "file";
             output += "\",\"name\":\"";
             output += entry.name() + (String(dir.name())).length();
-        }        
+        }
         output += "\"";
         output += "}";
         server.sendContent(output);
@@ -303,14 +303,14 @@ void MywebServer(void *parameter)
     if (WiFi.localIP().toString() != "0.0.0.0" || WiFi.getMode() == 3)
     {
 
-        M5m.Lcd.drawString("HTTP server started", 10, 40, 4);
+        M5.Lcd.drawString("HTTP server started", 10, 40, 4);
         if (WiFi.getMode() == 3)
         {
-            M5m.Lcd.drawString("http://192.168.4.1", 10, 70, 4);
+            M5.Lcd.drawString("http://192.168.4.1", 10, 70, 4);
         }
         else
         {
-            M5m.Lcd.drawString("http://" + WiFi.localIP().toString(), 10, 70, 4);
+            M5.Lcd.drawString("http://" + WiFi.localIP().toString(), 10, 70, 4);
         }
 
         server.on("/list", HTTP_GET, printDirectory);
@@ -320,9 +320,9 @@ void MywebServer(void *parameter)
         server.onNotFound(handleNotFound);
 
         server.begin();
-        M5m.Lcd.drawString("If you exit this app,", 10, 130, 2);
-        M5m.Lcd.drawString("the server will continue to run", 10, 150, 2);
-        M5m.Lcd.drawString("untill you stop it.", 10, 170, 2);
+        M5.Lcd.drawString("If you exit this app,", 10, 130, 2);
+        M5.Lcd.drawString("the server will continue to run", 10, 150, 2);
+        M5.Lcd.drawString("untill you stop it.", 10, 170, 2);
     }
     for (;;)
     {
@@ -334,26 +334,26 @@ void MywebServer(void *parameter)
 
 void WebServerClass::Run()
 {
-    while (!M5m.BtnB.wasPressed())
+    while (!M5.BtnB.wasPressed())
     {
-        M5m.update();
-        if (M5m.BtnC.wasPressed())
+        M5.update();
+        if (M5.BtnC.wasPressed())
         {
-            M5m.windowClr();
+            menu.windowClr();
             if (webServerTask != NULL)
             {
                 vTaskDelete(webServerTask);
                 webServerTask = NULL;
-                M5m.Lcd.drawString("MDNS server stoped", 10, 40, 4);
-                M5m.Lcd.drawString("HTTP server stoped", 10, 70, 4);
+                M5.Lcd.drawString("MDNS server stoped", 10, 40, 4);
+                M5.Lcd.drawString("HTTP server stoped", 10, 70, 4);
             }
         }
 
-        if (M5m.BtnA.wasPressed())
+        if (M5.BtnA.wasPressed())
         {
             if (webServerTask == NULL)
             {
-                M5m.windowClr();
+                menu.windowClr();
                 xTaskCreatePinnedToCore(
                     MywebServer,    /* Task function. */
                     "MywebServer",  /* name of the task, a name just for humans */
@@ -369,11 +369,11 @@ void WebServerClass::Run()
 
 WebServerClass::WebServerClass()
 {
-    M5m.update();
-    M5m.drawAppMenu(F("WebServer"), F("START"), F("ESC"), F("STOP"));
+    M5.update();
+    menu.drawAppMenu(F("WebServer"), F("START"), F("ESC"), F("STOP"));
 }
 
 WebServerClass::~WebServerClass()
 {
-    M5m.show();
+    menu.show();
 }

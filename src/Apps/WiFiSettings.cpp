@@ -1,16 +1,17 @@
 #include "WiFiSettings.h"
+#include <M5Core2.h>
 
 void WifiSettingsClass::AP_Mode()
 {
     WiFi.disconnect();
     vTaskDelay(200 / portTICK_PERIOD_MS);
     WiFi.mode(WIFI_MODE_AP);
-    M5m.WiFi_Mode = WIFI_MODE_AP;
+    menu.WiFi_Mode = WIFI_MODE_AP;
     WiFi.begin("M5Stack");
     WiFi.softAPsetHostname("M5Stack");
-    M5m.Lcd.drawString("AP Mode Started", 5, 50, 2);
-    M5m.Lcd.drawString("Host Name: M5Stack", 5, 70, 2);
-    M5m.Lcd.drawString("IP Address: " + WiFi.softAPIP().toString(), 5, 90, 2);
+    M5.Lcd.drawString("AP Mode Started", 5, 50, 2);
+    M5.Lcd.drawString("Host Name: M5Stack", 5, 70, 2);
+    M5.Lcd.drawString("IP Address: " + WiFi.softAPIP().toString(), 5, 90, 2);
 }
 
 void WifiSettingsClass::STA_Mode()
@@ -18,9 +19,9 @@ void WifiSettingsClass::STA_Mode()
     WiFi.disconnect();
     WiFi.mode(WIFI_MODE_STA);
     WiFi.begin();
-    M5m.WiFi_Mode = WIFI_MODE_STA;
-    M5m.Lcd.drawString("STA Mode Started", 5, 50, 2);
-    M5m.Lcd.drawString("Will Connect to stored SSID", 5, 70, 2);
+    menu.WiFi_Mode = WIFI_MODE_STA;
+    M5.Lcd.drawString("STA Mode Started", 5, 50, 2);
+    M5.Lcd.drawString("Will Connect to stored SSID", 5, 70, 2);
 }
 
 void WifiSettingsClass::APSTA_Mode()
@@ -28,9 +29,9 @@ void WifiSettingsClass::APSTA_Mode()
     WiFi.disconnect();
     WiFi.mode(WIFI_MODE_APSTA);
     WiFi.begin();
-    M5m.WiFi_Mode = WIFI_MODE_APSTA;
-    M5m.Lcd.drawString("AP + STA Mode Started", 5, 50, 2);
-    M5m.Lcd.drawString("Will use the stored SSID", 5, 70, 2);
+    menu.WiFi_Mode = WIFI_MODE_APSTA;
+    M5.Lcd.drawString("AP + STA Mode Started", 5, 50, 2);
+    M5.Lcd.drawString("Will use the stored SSID", 5, 70, 2);
 }
 
 void WifiSettingsClass::SmartConfig()
@@ -38,124 +39,124 @@ void WifiSettingsClass::SmartConfig()
     int i = 0;
     WiFi.mode(WIFI_AP_STA);
     WiFi.beginSmartConfig();
-    M5m.Lcd.drawString("Waiting for SmartConfig", 5, 30, 2);
+    M5.Lcd.drawString("Waiting for SmartConfig", 5, 30, 2);
     while (!WiFi.smartConfigDone())
     {
-        M5m.Lcd.setTextColor(WHITE);
-        M5m.Lcd.drawNumber(i, 5, 50, 2);
+        M5.Lcd.setTextColor(WHITE);
+        M5.Lcd.drawNumber(i, 5, 50, 2);
         delay(500);
-        M5m.Lcd.setTextColor(BLACK);
-        M5m.Lcd.drawNumber(i, 5, 50, 2);
+        M5.Lcd.setTextColor(BLACK);
+        M5.Lcd.drawNumber(i, 5, 50, 2);
         if (i == 119)
         {
-            M5m.Lcd.setTextColor(WHITE);
-            M5m.Lcd.drawString("SmartConfig NOT received!", 5, 70, 2);
+            M5.Lcd.setTextColor(WHITE);
+            M5.Lcd.drawString("SmartConfig NOT received!", 5, 70, 2);
             STA_Mode();
             return;
         }
         i++;
     }
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.drawString("SmartConfig received", 5, 70, 2);
-    M5m.Lcd.drawString("Waiting for WiFi", 5, 90, 2);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.drawString("SmartConfig received", 5, 70, 2);
+    M5.Lcd.drawString("Waiting for WiFi", 5, 90, 2);
     i = 0;
     while (WiFi.status() != WL_CONNECTED)
     {
-        M5m.Lcd.setTextColor(WHITE);
-        M5m.Lcd.drawNumber(i, 5, 110, 2);
+        M5.Lcd.setTextColor(WHITE);
+        M5.Lcd.drawNumber(i, 5, 110, 2);
         vTaskDelay(500 / portTICK_PERIOD_MS);
-        M5m.Lcd.setTextColor(BLACK);
-        M5m.Lcd.drawNumber(i, 5, 110, 2);
+        M5.Lcd.setTextColor(BLACK);
+        M5.Lcd.drawNumber(i, 5, 110, 2);
         if (i == 59)
         {
             STA_Mode();
-            M5m.Lcd.setTextColor(WHITE);
-            M5m.Lcd.drawString("Wifi Not Found!", 5, 130, 2);
+            M5.Lcd.setTextColor(WHITE);
+            M5.Lcd.drawString("Wifi Not Found!", 5, 130, 2);
             return;
         }
         i++;
     }
-    M5m.Lcd.setTextColor(WHITE);
-    M5m.Lcd.drawString("WiFi Connected", 5, 130, 2);
-    M5m.Lcd.drawString("IP: " + WiFi.localIP().toString(), 5, 150, 2);
-    M5m.WiFi_Mode = WIFI_MODE_STA;
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.drawString("WiFi Connected", 5, 130, 2);
+    M5.Lcd.drawString("IP: " + WiFi.localIP().toString(), 5, 150, 2);
+    menu.WiFi_Mode = WIFI_MODE_STA;
 }
 
 void WifiSettingsClass::Run()
 {
-    M5m.clearList();
-    M5m.setListCaption("WiFi");
-    M5m.addList("WiFi SmartConfig");
-    M5m.addList("Connect by WPS Button");
-    M5m.addList("Connect by WPS Pin Code");
-    M5m.addList("WiFi STA");
-    M5m.addList("WiFi AP");
-    M5m.addList("WiFi OFF");
-    M5m.showList();
+    menu.clearList();
+    menu.setListCaption("WiFi");
+    menu.addList("WiFi SmartConfig");
+    menu.addList("Connect by WPS Button");
+    menu.addList("Connect by WPS Pin Code");
+    menu.addList("WiFi STA");
+    menu.addList("WiFi AP");
+    menu.addList("WiFi OFF");
+    menu.showList();
 
-    while (!M5m.BtnA.wasPressed())
+    while (!M5.BtnA.wasPressed())
     {
-        if (M5m.BtnC.wasPressed())
+        if (M5.BtnC.wasPressed())
         {
-            M5m.nextList();
+            menu.nextList();
         }
-        if (M5m.BtnB.wasPressed())
+        if (M5.BtnB.wasPressed())
         {
-            if (M5m.getListString() == "WiFi STA")
+            if (menu.getListString() == "WiFi STA")
             {
-                M5m.windowClr();
+                menu.windowClr();
                 STA_Mode();
                 vTaskDelay(2000 / portTICK_PERIOD_MS);
-                M5m.windowClr();
-                M5m.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
-                M5m.showList();
+                menu.windowClr();
+                menu.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
+                menu.showList();
             }
-            if (M5m.getListString() == "WiFi SmartConfig")
+            if (menu.getListString() == "WiFi SmartConfig")
             {
-                M5m.windowClr();
+                menu.windowClr();
                 SmartConfig();
                 vTaskDelay(2000 / portTICK_PERIOD_MS);
-                M5m.windowClr();
-                M5m.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
-                M5m.showList();
+                menu.windowClr();
+                menu.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
+                menu.showList();
             }
-            if (M5m.getListString() == "WiFi AP")
+            if (menu.getListString() == "WiFi AP")
             {
-                M5m.windowClr();
+                menu.windowClr();
                 AP_Mode();
                 vTaskDelay(2000 / portTICK_PERIOD_MS);
-                M5m.windowClr();
-                M5m.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
-                M5m.showList();
+                menu.windowClr();
+                menu.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
+                menu.showList();
             }
-            if (M5m.getListString() == "Connect by WPS Button")
+            if (menu.getListString() == "Connect by WPS Button")
             {
-                M5m.windowClr();
+                menu.windowClr();
                 vTaskDelay(200 / portTICK_PERIOD_MS);
                 Wps_run(true);
-                M5m.WiFi_Mode = WIFI_MODE_STA;
+                menu.WiFi_Mode = WIFI_MODE_STA;
             }
-            if (M5m.getListString() == "Connect by WPS Pin Code")
+            if (menu.getListString() == "Connect by WPS Pin Code")
             {
-                M5m.windowClr();
+                menu.windowClr();
                 vTaskDelay(200 / portTICK_PERIOD_MS);
                 Wps_run(false);
-                M5m.WiFi_Mode = WIFI_MODE_STA;
+                menu.WiFi_Mode = WIFI_MODE_STA;
             }
-            if (M5m.getListString() == "WiFi OFF")
+            if (menu.getListString() == "WiFi OFF")
             {
-                M5m.windowClr();
+                menu.windowClr();
                 vTaskDelay(200 / portTICK_PERIOD_MS);
                 WiFi.disconnect();
                 WiFi.mode(WIFI_MODE_NULL);
-                M5m.WiFi_Mode = WIFI_MODE_NULL;
-                M5m.Lcd.drawString("WiFi Turned OFF", 5, 50, 2);
+                menu.WiFi_Mode = WIFI_MODE_NULL;
+                M5.Lcd.drawString("WiFi Turned OFF", 5, 50, 2);
                 vTaskDelay(2000 / portTICK_PERIOD_MS);
-                M5m.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
-                M5m.showList();
+                menu.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
+                menu.showList();
             }
         }
-        M5m.update();
+        M5.update();
     }
     preferences.begin("WiFi", false);
     preferences.putInt("mode", (int)WiFi.getMode());
@@ -164,11 +165,11 @@ void WifiSettingsClass::Run()
 
 WifiSettingsClass::WifiSettingsClass()
 {
-    M5m.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
-    M5m.update();
+    menu.drawAppMenu(F("WiFi"), F("ESC"), F("SELECT"), F("LIST"));
+    M5.update();
 }
 
 WifiSettingsClass::~WifiSettingsClass()
 {
-    M5m.show();
+    menu.show();
 }

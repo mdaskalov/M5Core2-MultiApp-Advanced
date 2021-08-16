@@ -3,47 +3,47 @@
 // the game list menu
 void GamesListClass::Run()
 {
-    M5m.update();
-    M5m.drawAppMenu(F("GAMES"), F("ESC"), F("SELECT"), F("LIST"));
-    M5m.clearList();
-    M5m.setListCaption("GAMES");
+    M5.update();
+    menu.drawAppMenu(F("GAMES"), F("ESC"), F("SELECT"), F("LIST"));
+    menu.clearList();
+    menu.setListCaption("GAMES");
 
     // The list items Add new items to list to be displayed
-    M5m.addList("TETRIS");
-    M5m.addList("FLAPPY BIRD");
-    M5m.addList("ALIEN SHOOTER");
-    M5m.showList();
+    menu.addList("TETRIS");
+    menu.addList("FLAPPY BIRD");
+    menu.addList("ALIEN SHOOTER");
+    menu.showList();
 
-    while (!M5m.BtnA.wasPressed())
+    while (!M5.BtnA.wasPressed())
     {
-        if (M5m.BtnC.wasPressed())
+        if (M5.BtnC.wasPressed())
         {
-            M5m.nextList();
+            menu.nextList();
         }
-        if (M5m.BtnB.wasPressed())
+        if (M5.BtnB.wasPressed())
         {
-            if (M5m.getListString() == "TETRIS")
+            if (menu.getListString() == "TETRIS")
             {
-                M5m.update();
+                M5.update();
                 TetrisClass *TetrisObj = new TetrisClass();
                 TetrisObj->Run();
                 TetrisClass::DestroyInstance(TetrisObj);
             }
-            if (M5m.getListString() == "FLAPPY BIRD")
+            if (menu.getListString() == "FLAPPY BIRD")
             {
-                M5m.update();
+                M5.update();
                 FlappyBirdClass FlappyBirdObj;
                 FlappyBirdObj.Run();
             }
-            if (M5m.getListString() == "ALIEN SHOOTER")
+            if (menu.getListString() == "ALIEN SHOOTER")
             {
-                M5m.update();
+                M5.update();
                 // The game object with member call
                 SpaceShooterClass SpaceShooterObj;
                 SpaceShooterObj.Run();
             }
         }
-        M5m.update();
+        M5.update();
     }
 }
 
@@ -53,5 +53,5 @@ GamesListClass::GamesListClass()
 
 GamesListClass::~GamesListClass()
 {
-    M5m.show();
+    menu.show();
 }

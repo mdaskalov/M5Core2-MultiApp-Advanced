@@ -73,12 +73,12 @@ void SdBrowserClass::aSortFiles()
 
 void SdBrowserClass::buildMyMenu()
 {
-    M5m.clearList();
-    M5m.setListCaption("Files");
+    menu.clearList();
+    menu.setListCaption("Files");
     for (int i = 0; i < appsCount; i++)
     {
         String shortName = fileVector[i].fileName.substring(1);
-        M5m.addList(shortName);
+        menu.addList(shortName);
     }
 }
 
@@ -88,46 +88,46 @@ void SdBrowserClass::Run()
     listDir(My_SD, "/", levels);
     aSortFiles();
     buildMyMenu();
-    M5m.showList();
-    while (!M5m.BtnA.wasPressed())
+    menu.showList();
+    while (!M5.BtnA.wasPressed())
     {
-        if (M5m.BtnC.wasPressed())
+        if (M5.BtnC.wasPressed())
         {
             if (repaint)
             {
-                M5m.Lcd.clear();
-                M5m.drawAppMenu(F("SD BROWSER"), F("EXIT"), F("OPEN"), F(">"));
-                M5m.btnRestore();
+                M5.Lcd.clear();
+                menu.drawAppMenu(F("SD BROWSER"), F("EXIT"), F("OPEN"), F(">"));
+                menu.btnRestore();
             }
             repaint = false;
-            M5m.nextList();
+            menu.nextList();
         }
-        int MenuID = M5m.getListID();
+        int MenuID = menu.getListID();
 
-        if (M5m.BtnB.wasPressed())
+        if (M5.BtnB.wasPressed())
         {
             String FileName = fileVector[MenuID].fileName;
             if (FileName.endsWith(".jpg"))
             {
-                M5m.Lcd.clear();
+                M5.Lcd.clear();
                 if (fileVector[MenuID].fileSize > 100000UL)
                 {
-                    M5m.Lcd.drawJpgFile(My_SD, FileName.c_str(), 0, 0, 0, 0, 0, 0, JPEG_DIV_8);
+                    M5.Lcd.drawJpgFile(My_SD, FileName.c_str(), 0, 0, 0, 0, 0, 0, JPEG_DIV_8);
                 }
                 else if (fileVector[MenuID].fileSize > 70000UL)
                 {
-                    M5m.Lcd.drawJpgFile(My_SD, FileName.c_str(), 0, 0, 0, 0, 0, 0, JPEG_DIV_4);
+                    M5.Lcd.drawJpgFile(My_SD, FileName.c_str(), 0, 0, 0, 0, 0, 0, JPEG_DIV_4);
                 }
                 else if (fileVector[MenuID].fileSize > 50000)
                 {
-                    M5m.Lcd.drawJpgFile(My_SD, FileName.c_str(), 0, 0, 0, 0, 0, 0, JPEG_DIV_2);
+                    M5.Lcd.drawJpgFile(My_SD, FileName.c_str(), 0, 0, 0, 0, 0, 0, JPEG_DIV_2);
                 }
                 else
                 {
-                    M5m.Lcd.drawJpgFile(My_SD, FileName.c_str());
+                    M5.Lcd.drawJpgFile(My_SD, FileName.c_str());
                 }
                 repaint = true;
-                M5m.btnRestore();
+                menu.btnRestore();
             }
             else if (FileName.endsWith(".mp3"))
             {
@@ -142,30 +142,30 @@ void SdBrowserClass::Run()
             else if (!inmenu)
             {
                 inmenu = true;
-                M5m.windowClr();
-                M5m.Lcd.drawCentreString("File Name: " + fileVector[MenuID].fileName, M5m.Lcd.width() / 2, (M5m.Lcd.height() / 2) - 10, 2);
-                M5m.Lcd.drawCentreString("File Size: " + String(fileVector[MenuID].fileSize), M5m.Lcd.width() / 2, (M5m.Lcd.height() / 2) + 10, 2);
+                menu.windowClr();
+                M5.Lcd.drawCentreString("File Name: " + fileVector[MenuID].fileName, M5.Lcd.width() / 2, (M5.Lcd.height() / 2) - 10, 2);
+                M5.Lcd.drawCentreString("File Size: " + String(fileVector[MenuID].fileSize), M5.Lcd.width() / 2, (M5.Lcd.height() / 2) + 10, 2);
             }
             else
             {
                 inmenu = false;
-                M5m.showList();
+                menu.showList();
             }
         }
-        M5m.update();
+        M5.update();
     }
 }
 
 SdBrowserClass::SdBrowserClass()
 {
-    M5m.update();
-    M5m.drawAppMenu(F("SD BROWSER"), F("EXIT"), F("OPEN"), F(">"));
+    M5.update();
+    menu.drawAppMenu(F("SD BROWSER"), F("EXIT"), F("OPEN"), F(">"));
 }
 
 SdBrowserClass::~SdBrowserClass()
 {
     fileVector.clear();
     fileVector.shrink_to_fit();
-    M5m.clearList();
-    M5m.show();
+    menu.clearList();
+    menu.show();
 }

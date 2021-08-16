@@ -1,5 +1,5 @@
 #pragma once
-#include "M5StackMod.h"
+#include "globals.h"
 #include "WebServer.h"
 
 class WebServerClass
@@ -11,5 +11,5 @@ public:
     void Run();
 
 private:
-    
+
 };
