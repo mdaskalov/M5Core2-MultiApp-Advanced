@@ -39,6 +39,8 @@ class Menu
     void HprogressBar(int x, int y, int w, int h, uint32_t color, uint8_t val, bool redraw);
     void VprogressBar(int x, int y, int w, int h, uint32_t color, uint8_t val, bool redraw);
 
+    Menu();
+
   private:
     String listCaption;
     void drawListItem(uint32_t inIDX, uint32_t postIDX);

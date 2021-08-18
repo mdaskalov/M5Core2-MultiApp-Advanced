@@ -97,7 +97,7 @@ void Menu::showList()
 {
   windowClr();
   unsigned int labelid = 0;
-  M5.Lcd.drawCentreString(listCaption, M5.Lcd.width() / 2, 45, 2);
+  M5.Lcd.drawCentreString(listCaption, M5.Lcd.width() / 2, 45, FONT2);
   if ((list_page + 1) == list_pages)
   {
     if (list_lastpagelines == 0 && list_count >= LIST_PAGE_LABELS)
@@ -226,9 +226,9 @@ void Menu::btnRestore()
   M5.Lcd.fillRoundRect(31, M5.Lcd.height() - 28, 60, 28, 5, menucolor);
   M5.Lcd.fillRoundRect(126, M5.Lcd.height() - 28, 60, 28, 5, menucolor);
   M5.Lcd.fillRoundRect(221, M5.Lcd.height() - 28, 60, 28, 5, menucolor);
-  M5.Lcd.drawCentreString(lastBtnTittle[0], 31 + 30, M5.Lcd.height() - 28 + 6, 2);
-  M5.Lcd.drawCentreString(lastBtnTittle[1], 126 + 30, M5.Lcd.height() - 28 + 6, 2);
-  M5.Lcd.drawCentreString(lastBtnTittle[2], 221 + 30, M5.Lcd.height() - 28 + 6, 2);
+  M5.Lcd.drawCentreString(lastBtnTittle[0], 31 + 30, M5.Lcd.height() - 28 + 6, FONT2);
+  M5.Lcd.drawCentreString(lastBtnTittle[1], 126 + 30, M5.Lcd.height() - 28 + 6, FONT2);
+  M5.Lcd.drawCentreString(lastBtnTittle[2], 221 + 30, M5.Lcd.height() - 28 + 6, FONT2);
   M5.Lcd.setTextColor(menutextcolor, windowcolor);
 }
 
@@ -269,24 +269,26 @@ void Menu::drawMenu(String inmenuttl, String inbtnAttl, String inbtnBttl, String
   }
 
   M5.Lcd.setTextColor(intxtcolor);
-  M5.Lcd.drawCentreString(inmenuttl, M5.Lcd.width() / 2, 6, 2);
+  M5.Lcd.drawCentreString(inmenuttl, M5.Lcd.width() / 2, 6, FONT2);
 
-  M5.Lcd.drawCentreString(inbtnAttl, 31 + 30, M5.Lcd.height() - 28 + 6, 2);
-  M5.Lcd.drawCentreString(inbtnBttl, 126 + 30, M5.Lcd.height() - 28 + 6, 2);
-  M5.Lcd.drawCentreString(inbtnCttl, 221 + 30, M5.Lcd.height() - 28 + 6, 2);
+  M5.Lcd.drawCentreString(inbtnAttl, 31 + 30, M5.Lcd.height() - 28 + 6, FONT2);
+  M5.Lcd.drawCentreString(inbtnBttl, 126 + 30, M5.Lcd.height() - 28 + 6, FONT2);
+  M5.Lcd.drawCentreString(inbtnCttl, 221 + 30, M5.Lcd.height() - 28 + 6, FONT2);
 }
 
 void Menu::drawListItem(uint32_t inIDX, uint32_t postIDX)
 {
   if (inIDX == list_idx)
   {
-    M5.Lcd.drawString(list_labels[inIDX], 15, 80 + (postIDX * 20), 2);
-    M5.Lcd.drawString(">", 3, 80 + (postIDX * 20), 2);
+    M5.Lcd.drawString(">", 3, 80 + (postIDX * 20), FONT2);
   }
-  else
-  {
-    M5.Lcd.drawString(list_labels[inIDX], 15, 80 + (postIDX * 20), 2);
-  }
+  M5.Lcd.drawString(list_labels[inIDX], 15, 80 + (postIDX * 20), FONT2);
+}
+
+Menu::Menu()
+{
+  M5.Lcd.setTextSize(1);
+	setColorSchema(TFT_NAVY,TFT_BLACK,TFT_WHITE);
 }
 
 Menu menu;
