@@ -10,7 +10,6 @@ bool OtaRunning = false;
 void setup()
 {
 	M5.begin();
-	menu.setColorSchema(TFT_NAVY,TFT_NAVY,TFT_WHITE);
 
 	dacWrite(25, 0); // Speaker OFF
 	preferences.begin("WiFi", false);
