@@ -1,11 +1,11 @@
-# M5Stack MultiApp Advanced
+# M5Core2 MultiApp Advanced
 
-  ### Using this app, M5Stack can run all included apps without reflashing/rebooting
-   #### - This is the continued development of the original M5Stack MultiApp firmware
+  ### Using this app, M5Core2 can run all included apps without reflashing/rebooting
+   #### - This is the continued development of the original M5Core2 MultiApp firmware
    #### - This project is made on PlatformIO IDE
    #### - With some minor work it can be adapted to other IDE's like VisualStudio+VisualMicro or Eclipse.
 
-- This project use modifed M5Stack M5StackSAM and EspAudio libraryes from project local storage.
+- This project use modifed M5Core2 M5StackSAM and EspAudio libraryes from project local storage.
 
 ![image](MultiAppImgs/Apps.jpg)
   
@@ -17,10 +17,10 @@
 - Install ESP32 Platform on PlatformIO
 - Open the MultiApp Project folder on PlatformIO
 - Click the BUILD button ![image](MultiAppImgs/BuildandFlash.jpg)
-  + This will build and Flash the firmware to M5Stack connected to your PC USB
-- To use Local Ota to flash your M5Stack
-  + The M5Stack must be connected to the same network as your PC
-  + In the project "platformio.ini" file set "upload_port = [your M5StackIP]"
+  + This will build and Flash the firmware to M5Core2 connected to your PC USB
+- To use Local Ota to flash your M5Core2
+  + The M5Core2 must be connected to the same network as your PC
+  + In the project "platformio.ini" file set "upload_port = [your M5Core2IP]"
 
 ## The project include:
 - Applications
@@ -85,7 +85,7 @@
       + Display Files Content (images, text, etc...)
     - SD Browser that support
       + Play video files 
-          + limited to 290x162 rezolution for standard M5Stack without PSRam. 
+          + limited to 290x162 rezolution for standard M5Core2 without PSRam. 
           + Higher resolutions can be used with PSRam option.
       + Display Jpeg files on the screen
       + Resize Jpeg to fit to screen size
@@ -122,7 +122,7 @@
   
 ## This Firmware also support:
 + Local OTA flashing
-	+ Set the M5Stack IP as Upload Port on PlatformIO then you can flash the device over WIFI
+	+ Set the M5Core2 IP as Upload Port on PlatformIO then you can flash the device over WIFI
 + Remote OTA Update
 	+ Will check the server for new version at startup
 	+ If a new version was found, will update to new version
