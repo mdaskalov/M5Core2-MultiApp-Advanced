@@ -280,10 +280,8 @@ TetrisClass::~TetrisClass()
     preferences.putInt("t_sc", max_score);
     preferences.end();
 
-
     M5.Lcd.fillScreen(0);
     M5.Lcd.setTextSize(1);
 	M5.Lcd.setTextFont(1);
-    menu.drawAppMenu(F("GAMES"), F("ESC"), F("SELECT"), F("LIST"));
-    menu.showList();
+    menu.show();
 }

@@ -35,7 +35,7 @@ void Menu::execute()
   }
   else
   {
-    GoToLevel(menuList[levelIDX][menuIDX].gotoLevel);
+    gotoLevel(menuList[levelIDX][menuIDX].gotoLevel);
   }
 }
 
@@ -57,7 +57,7 @@ void Menu::drawAppMenu(String inmenuttl, String inbtnAttl, String inbtnBttl, Str
   M5.Lcd.setTextColor(menutextcolor, windowcolor);
 }
 
-void Menu::GoToLevel(uint32_t inlevel)
+void Menu::gotoLevel(uint32_t inlevel)
 {
   levelIDX = inlevel;
   menuIDX = 0;
@@ -72,23 +72,29 @@ unsigned int Menu::getrgb(uint8_t inred, uint8_t ingrn, uint8_t inblue)
   return inred << 11 | ingrn << 5 | inblue;
 }
 
-void Menu::addMenuItem(uint32_t levelID, const char *menu_title, const char *btnA_title, const char *btnB_title,
-                             const char *btnC_title, signed char goto_level, const char *Menu_Img, void (*function)())
+void Menu::addMenuItem(uint32_t levelID, const char *title, signed char goto_level, const char *img, void (*function)())
+{
+  addMenuItem(levelID, title, "<", "OK", ">", goto_level, img, function);
+}
+
+void Menu::addMenuItem(uint32_t levelID, const char *title, const char *btnA, const char *btnB,
+                             const char *btnC, signed char goto_level, const char *img, void (*function)())
 {
   uint32_t mCnt = menuCount[levelID];
   menuList[levelID] = (MenuCommandCallback *)realloc(menuList[levelID], (mCnt + 1) * sizeof(MenuCommandCallback));
-  strncpy(menuList[levelID][mCnt].title, menu_title, MENU_TITLE_MAX_SIZE);
-  strncpy(menuList[levelID][mCnt].btnAtitle, btnA_title, BTN_TITLE_MAX_SIZE);
-  strncpy(menuList[levelID][mCnt].btnBtitle, btnB_title, BTN_TITLE_MAX_SIZE);
-  strncpy(menuList[levelID][mCnt].btnCtitle, btnC_title, BTN_TITLE_MAX_SIZE);
+  strncpy(menuList[levelID][mCnt].title, title, MENU_TITLE_MAX_SIZE);
+  strncpy(menuList[levelID][mCnt].btnAtitle, btnA, BTN_TITLE_MAX_SIZE);
+  strncpy(menuList[levelID][mCnt].btnBtitle, btnB, BTN_TITLE_MAX_SIZE);
+  strncpy(menuList[levelID][mCnt].btnCtitle, btnC, BTN_TITLE_MAX_SIZE);
   menuList[levelID][mCnt].gotoLevel = goto_level;
-  menuList[levelID][mCnt].MenuImg = Menu_Img;
+  menuList[levelID][mCnt].MenuImg = img;
   menuList[levelID][mCnt].function = function;
   menuCount[levelID]++;
 }
 
 void Menu::show()
 {
+  M5.update();
   drawMenu(menuList[levelIDX][menuIDX].title, menuList[levelIDX][menuIDX].btnAtitle, menuList[levelIDX][menuIDX].btnBtitle,
            menuList[levelIDX][menuIDX].btnCtitle, menucolor, windowcolor, menuList[levelIDX][menuIDX].MenuImg, menutextcolor);
 }

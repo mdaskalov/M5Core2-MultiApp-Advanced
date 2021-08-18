@@ -4,7 +4,7 @@
 
 #define MENU_TITLE_MAX_SIZE 24
 #define BTN_TITLE_MAX_SIZE 6
-#define MAX_SUBMENUS 3
+#define MAX_SUBMENUS 4
 
 #define LIST_MAX_LABEL_SIZE 32
 #define LIST_PAGE_LABELS 6
@@ -22,10 +22,11 @@ class Menu
     void windowClr();
     void setColorSchema(unsigned int inmenucolor, unsigned int inwindowcolor, unsigned int intextcolor);
     void drawAppMenu(String inmenuttl, String inbtnAttl, String inbtnBttl, String inbtnCttl);
-    void GoToLevel(uint32_t inlevel);
+    void gotoLevel(uint32_t inlevel);
     unsigned int getrgb(uint8_t inred, uint8_t ingrn, uint8_t inblue);
-    void addMenuItem(uint32_t levelID, const char *menu_title, const char *btnA_title, const char *btnB_title, const char *btnC_title,
-                    signed char goto_level, const char *Menu_Img, void (*function)());
+    void addMenuItem(uint32_t levelID, const char *title, signed char goto_level, const char *img, void (*function)());
+    void addMenuItem(uint32_t levelID, const char *title, const char *btnA, const char *btnB, const char *btnC,
+                    signed char goto_level, const char *img, void (*function)());
     void show();
     void showList();
     void clearList();

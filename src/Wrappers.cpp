@@ -2,10 +2,6 @@
 
 // Wrapper funtctions for Apps classes instances calls
 
-void appReturn()
-{
-}
-
 void appSleep()
 {
     preferences.begin("WiFi", false);
@@ -57,12 +53,6 @@ void appWebServer()
     WebServerObj.Run();
 }
 
-void appGamesList()
-{
-    GamesListClass GamesListObj;
-    GamesListObj.Run();
-}
-
 void appWebRadio()
 {
     WebRadioClass WebRadioObj;
@@ -73,4 +63,23 @@ void appWeatherStation()
 {
     WeatherStationClass WeatherStationObj;
     WeatherStationObj.Run();
+}
+
+void gameTetris()
+{
+    TetrisClass *TetrisObj = new TetrisClass();
+    TetrisObj->Run();
+    TetrisClass::DestroyInstance(TetrisObj);
+}
+
+void gameFlappyBird()
+{
+    FlappyBirdClass FlappyBirdObj;
+    FlappyBirdObj.Run();
+}
+
+void gameSpaceShooter()
+{
+    SpaceShooterClass SpaceShooterObj;
+    SpaceShooterObj.Run();
 }
