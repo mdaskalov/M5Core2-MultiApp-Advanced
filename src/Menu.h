@@ -40,13 +40,37 @@ class Menu
     void HprogressBar(int x, int y, int w, int h, uint32_t color, uint8_t val, bool redraw);
     void VprogressBar(int x, int y, int w, int h, uint32_t color, uint8_t val, bool redraw);
 
+    void initialize();
+
     Menu();
 
   private:
+    int titleWidth;
+    int titleHeight;
+    int btnGap;
+    int btnWidth;
+    int btnHeight;
+    int xBtnA;
+    int xBtnB;
+    int xBtnC;
+    int yBtn;
     String listCaption;
-    void drawListItem(uint32_t inIDX, uint32_t postIDX);
-    void drawMenu(String inmenuttl, String inbtnAttl, String inbtnBttl, String inbtnCttl, unsigned int inmenucolor,
-                  unsigned int inwindowcolor, const char *iMenuImg, unsigned int intxtcolor);
+
+    std::vector<String> list_labels;
+    uint32_t list_lastpagelines;
+    uint32_t list_count;
+    uint32_t list_pages;
+    uint32_t list_page;
+    unsigned int list_idx;
+    uint32_t list_lines;
+
+    uint32_t menuIDX;
+    uint32_t levelIDX;
+    uint32_t menuCount[MAX_SUBMENUS];
+    unsigned int menucolor;
+    unsigned int windowcolor;
+    unsigned int menutextcolor;
+
     struct MenuCommandCallback
     {
       char title[MENU_TITLE_MAX_SIZE + 1];
@@ -56,20 +80,13 @@ class Menu
       signed char gotoLevel;
       const char *MenuImg;
       void (*function)();
-    };
-    std::vector<String> list_labels;
-    uint32_t list_lastpagelines;
-    uint32_t list_count;
-    uint32_t list_pages;
-    uint32_t list_page;
-    unsigned int list_idx;
-    uint32_t list_lines;
+    }
+    *menuList[MAX_SUBMENUS];;
 
-    MenuCommandCallback *menuList[MAX_SUBMENUS];
-    uint32_t menuIDX;
-    uint32_t levelIDX;
-    uint32_t menuCount[MAX_SUBMENUS];
-    unsigned int menucolor;
-    unsigned int windowcolor;
-    unsigned int menutextcolor;
+    void displayClr();
+    void drawListItem(uint32_t inIDX, uint32_t postIDX);
+    void drawLabel(int32_t x, int32_t y, int32_t w, int32_t h, const String &title, unsigned int background, uint32_t color, uint8_t font=FONT2, int32_t radius=5);
+    void drawMenu(const String& inmenuttl, const String& inbtnAttl, const String& inbtnBttl, const String& inbtnCttl, unsigned int inmenucolor,
+                  unsigned int inwindowcolor, const char *iMenuImg, unsigned int intxtcolor);
+
 };

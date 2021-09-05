@@ -1,6 +1,8 @@
 #include "Menu.h"
 #include "Preferences.h"
 
+extern TFT_eSprite display;
+
 void Menu::up()
 {
   if (menuIDX < menuCount[levelIDX] - 1)
@@ -41,7 +43,7 @@ void Menu::execute()
 
 void Menu::windowClr()
 {
-  M5.Lcd.fillRoundRect(0, 29, M5.Lcd.width(), M5.Lcd.height() - 28 - 28, 5, windowcolor);
+  M5.Lcd.fillRect(0, titleHeight, display.width(), display.height() - titleHeight - btnHeight, TFT_BLACK);
 }
 
 void Menu::setColorSchema(unsigned int inmenucolor, unsigned int inwindowcolor, unsigned int intextcolor)
@@ -97,55 +99,6 @@ void Menu::show()
   M5.update();
   drawMenu(menuList[levelIDX][menuIDX].title, menuList[levelIDX][menuIDX].btnAtitle, menuList[levelIDX][menuIDX].btnBtitle,
            menuList[levelIDX][menuIDX].btnCtitle, menucolor, windowcolor, menuList[levelIDX][menuIDX].MenuImg, menutextcolor);
-}
-
-void Menu::showList()
-{
-  windowClr();
-  unsigned int labelid = 0;
-  M5.Lcd.drawCentreString(listCaption, M5.Lcd.width() / 2, 45, FONT2);
-  if ((list_page + 1) == list_pages)
-  {
-    if (list_lastpagelines == 0 && list_count >= LIST_PAGE_LABELS)
-    {
-      list_lines = LIST_PAGE_LABELS;
-      for (uint32_t i = 0; i < LIST_PAGE_LABELS; i++)
-      {
-        labelid = i + (list_page * LIST_PAGE_LABELS);
-        drawListItem(labelid, i);
-      }
-    }
-    else
-    {
-      if (list_pages > 1)
-      {
-        list_lines = list_lastpagelines;
-        for (uint32_t i = 0; i < list_lastpagelines; i++)
-        {
-          labelid = i + (list_page * LIST_PAGE_LABELS);
-          drawListItem(labelid, i);
-        }
-      }
-      else
-      {
-        list_lines = list_count;
-        for (uint32_t i = 0; i < list_count; i++)
-        {
-          labelid = i + (list_page * LIST_PAGE_LABELS);
-          drawListItem(labelid, i);
-        }
-      }
-    }
-  }
-  else
-  {
-    list_lines = LIST_PAGE_LABELS;
-    for (uint32_t i = 0; i < LIST_PAGE_LABELS; i++)
-    {
-      labelid = i + (list_page * LIST_PAGE_LABELS);
-      drawListItem(labelid, i);
-    }
-  }
 }
 
 void Menu::clearList()
@@ -258,44 +211,118 @@ void Menu::VprogressBar(int x, int y, int w, int h, uint32_t color, uint8_t val,
   M5.lcd.fillRoundRect(x + 1, y + (h - (h * (((float)val) / 100.0))), w - 2, h * (((float)val) / 100.0), 10, color);
 }
 
-void Menu::drawMenu(String inmenuttl, String inbtnAttl, String inbtnBttl, String inbtnCttl, unsigned int inmenucolor,
+void Menu::displayClr()
+{
+  display.fillRoundRect(0, titleHeight + 3, display.width(), display.height() - titleHeight - btnHeight - 4, 5, windowcolor);
+}
+
+void Menu::drawLabel(int32_t x, int32_t y, int32_t w, int32_t h, const String &title, unsigned int background, unsigned int color, uint8_t font, int32_t radius)
+{
+  display.fillRoundRect(x, y, w, h, radius, background);
+  display.setTextColor(color);
+  display.setTextDatum(CC_DATUM);
+  display.drawString(title, x + (w / 2), y + (h / 2), font);
+  display.setTextDatum(TL_DATUM);
+}
+
+void Menu::drawMenu(const String& inmenuttl, const String& inbtnAttl, const String& inbtnBttl, const String& inbtnCttl, unsigned int inmenucolor,
                           unsigned int inwindowcolor, const char *iMenuImg, unsigned int intxtcolor)
 {
   lastBtnTittle[0] = inbtnAttl;
   lastBtnTittle[1] = inbtnBttl;
   lastBtnTittle[2] = inbtnCttl;
-  M5.Lcd.fillRoundRect(31, M5.Lcd.height() - 28, 60, 28, 5, inmenucolor);
-  M5.Lcd.fillRoundRect(126, M5.Lcd.height() - 28, 60, 28, 5, inmenucolor);
-  M5.Lcd.fillRoundRect(221, M5.Lcd.height() - 28, 60, 28, 5, inmenucolor);
-  M5.Lcd.fillRoundRect(0, 0, M5.Lcd.width(), 28, 5, inmenucolor);
-  M5.Lcd.fillRoundRect(0, 29, M5.Lcd.width(), M5.Lcd.height() - 28 - 28, 5, inwindowcolor);
+
+  drawLabel(0, 0, titleWidth, titleHeight, inmenuttl, inmenucolor, intxtcolor, FONT2);
+  drawLabel(xBtnA, yBtn, btnWidth, btnHeight, inbtnAttl, inmenucolor, intxtcolor, FONT2);
+  drawLabel(xBtnB, yBtn, btnWidth, btnHeight, inbtnBttl, inmenucolor, intxtcolor, FONT2);
+  drawLabel(xBtnC, yBtn, btnWidth, btnHeight, inbtnCttl, inmenucolor, intxtcolor, FONT2);
+
+  displayClr();
   if (iMenuImg != NULL)
   {
-    M5.Lcd.drawJpg((uint8_t *)iMenuImg, (sizeof(iMenuImg) / sizeof(iMenuImg[0])), 0, 30);
+    display.drawJpg((uint8_t *)iMenuImg, (sizeof(iMenuImg) / sizeof(iMenuImg[0])), 0, 30);
   }
+  display.pushSprite(0,0);
+}
 
-  M5.Lcd.setTextColor(intxtcolor);
-  M5.Lcd.drawCentreString(inmenuttl, M5.Lcd.width() / 2, 6, FONT2);
-
-  M5.Lcd.drawCentreString(inbtnAttl, 31 + 30, M5.Lcd.height() - 28 + 6, FONT2);
-  M5.Lcd.drawCentreString(inbtnBttl, 126 + 30, M5.Lcd.height() - 28 + 6, FONT2);
-  M5.Lcd.drawCentreString(inbtnCttl, 221 + 30, M5.Lcd.height() - 28 + 6, FONT2);
+void Menu::showList()
+{
+  displayClr();
+  unsigned int labelid = 0;
+  display.setTextDatum(CC_DATUM);
+  display.drawString(listCaption, display.width() / 2, 45, FONT2);
+  display.setTextDatum(TL_DATUM);
+  if ((list_page + 1) == list_pages)
+  {
+    if (list_lastpagelines == 0 && list_count >= LIST_PAGE_LABELS)
+    {
+      list_lines = LIST_PAGE_LABELS;
+      for (uint32_t i = 0; i < LIST_PAGE_LABELS; i++)
+      {
+        labelid = i + (list_page * LIST_PAGE_LABELS);
+        drawListItem(labelid, i);
+      }
+    }
+    else
+    {
+      if (list_pages > 1)
+      {
+        list_lines = list_lastpagelines;
+        for (uint32_t i = 0; i < list_lastpagelines; i++)
+        {
+          labelid = i + (list_page * LIST_PAGE_LABELS);
+          drawListItem(labelid, i);
+        }
+      }
+      else
+      {
+        list_lines = list_count;
+        for (uint32_t i = 0; i < list_count; i++)
+        {
+          labelid = i + (list_page * LIST_PAGE_LABELS);
+          drawListItem(labelid, i);
+        }
+      }
+    }
+  }
+  else
+  {
+    list_lines = LIST_PAGE_LABELS;
+    for (uint32_t i = 0; i < LIST_PAGE_LABELS; i++)
+    {
+      labelid = i + (list_page * LIST_PAGE_LABELS);
+      drawListItem(labelid, i);
+    }
+  }
+  display.pushSprite(0,0);
 }
 
 void Menu::drawListItem(uint32_t inIDX, uint32_t postIDX)
 {
   if (inIDX == list_idx)
   {
-    M5.Lcd.drawString(">", 3, 80 + (postIDX * 20), FONT2);
+    display.drawString(">", 3, 80 + (postIDX * 20), FONT2);
   }
-  M5.Lcd.drawString(list_labels[inIDX], 15, 80 + (postIDX * 20), FONT2);
+  display.drawString(list_labels[inIDX], 15, 80 + (postIDX * 20), FONT2);
+}
+
+void Menu::initialize()
+{
+  titleWidth = display.width();
+  titleHeight = 28;
+  btnGap = 13;
+  btnWidth = (display.width() - (4 * btnGap)) / 3;
+  btnHeight = 28;
+  xBtnA = btnGap;
+  xBtnB = display.width() / 2 - btnWidth / 2;
+  xBtnC = display.width() - btnWidth - btnGap;
+  yBtn = display.height() - btnHeight;
+
+	setColorSchema(TFT_NAVY,TFT_BLACK,TFT_WHITE);
+  display.setTextSize(1);
 }
 
 Menu::Menu()
 {
-  M5.Lcd.setTextSize(1);
-	setColorSchema(TFT_NAVY,TFT_BLACK,TFT_WHITE);
+  initialize();
 }
-
-Menu menu;
-Preferences preferences;

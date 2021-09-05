@@ -7,9 +7,18 @@ unsigned long lastcheck = 0;
 int SignalStrength = 0;
 bool OtaRunning = false;
 
+TFT_eSprite display = TFT_eSprite(&M5.Lcd);
+
+Menu menu;
+Preferences preferences;
+
 void setup()
 {
 	M5.begin();
+
+	M5.Lcd.setRotation(1);
+  display.createSprite(M5.Lcd.width(), M5.Lcd.height());
+	menu.initialize();
 
 	dacWrite(25, 0); // Speaker OFF
 	preferences.begin("WiFi", false);
